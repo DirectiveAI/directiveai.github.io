@@ -1,18 +1,7 @@
 export default function define(runtime, observer) {
   const main = runtime.module();
-  main.variable(observer()).define(["md"], function(md){return(
-md`# Force-Directed Lattice
-
-This demonstrates [*forceLink*.iterations](https://github.com/d3/d3-force#link_iterations), which strengthens [d3-force](https://github.com/d3/d3-force)’s link constraint by applying the constraint multiple times per simulation step.`
-)});
-  main.variable(observer("viewof replay")).define("viewof replay", ["html"], function(html){return(
-html`<button>Replay`
-)});
-  main.variable(observer("replay")).define("replay", ["Generators", "viewof replay"], (G, _) => G.input(_));
-  main.variable(observer("chart")).define("chart", ["replay","data","d3","invalidation","DOM","width","height","drag"], function(replay,data,d3,invalidation,DOM,width,height,drag)
+  main.variable(observer("chart")).define("chart", ["data","d3","invalidation","DOM","width","height","drag"], function(data,d3,invalidation,DOM,width,height,drag)
 {
-  replay;
-
   const links = data.links.map(d => Object.create(d));
   const nodes = data.nodes.map(d => Object.create(d));
 
