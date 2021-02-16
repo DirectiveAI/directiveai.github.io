@@ -1,0 +1,14 @@
+{
+  "name": "365ab41f21191954",
+  "main": "365ab41f21191954@77.js",
+  "version": "77.0.0",
+  "homepage": "https://observablehq.com/d/365ab41f21191954",
+  "author": {
+    "name": "Mark Sullivan",
+    "url": "https://observablehq.com/@marksulls"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
