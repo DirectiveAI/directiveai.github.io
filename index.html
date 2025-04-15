@@ -1,14 +1,138 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>Directive AI</title>
-<link rel="stylesheet" type="text/css" href="./inspector.css">
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DirectiveAI | Custom AI & ML Solutions, Software Engineering, Fintech, Computer Vision, and Automation</title>
+        <meta name="description" content="Directive AI builds custom artificial intelligence, machine learning, software engineering, fintech, and computer vision solutions for innovative businesses. Unlock the power of next-generation AI technologies." />
+        <meta name="keywords" content="AI, artificial intelligence, machine learning, ML, software development, software engineering, fintech, computer vision, automation, deep learning, neural networks, data science, predictive analytics, intelligent systems, NLP, natural language processing, data engineering, business intelligence" />
+    
+        <!-- Canonical URL (update the href to your live site when deployed) -->
+        <link rel="canonical" href="https://www.directiveai.com/" />
+    
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Directive AI | Custom AI & ML Solutions, Software Engineering, Fintech, Computer Vision, and Automation" />
+        <meta property="og:description" content="Directive AI builds custom artificial intelligence, machine learning, software engineering, fintech, and computer vision solutions for innovative businesses. Unlock the power of next-generation AI technologies." />
+        <meta property="og:url" content="https://www.directiveai.com/" />
+        <!-- Optional: Add an OG image when available -->
+        <!-- <meta property="og:image" content="https://www.directiveai.com/og-image.jpg" /> -->
+    
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Directive AI | Custom AI & ML Solutions, Fintech & Computer Vision" />
+        <meta name="twitter:description" content="Custom artificial intelligence, machine learning, fintech, and computer vision solutions for innovative businesses." />
+        <!-- <meta name="twitter:image" content="https://www.directiveai.com/og-image.jpg" /> -->
+    
+        <link rel="stylesheet" href="style.css">
+        <!-- Favicon (optional) -->
+        <!-- <link rel="icon" href="/favicon.ico"> -->
+    </head>
 <body>
-<script type="module">
-
-import define from "./index.js";
-import {Runtime, Library, Inspector} from "./runtime.js";
-
-const runtime = new Runtime();
-const main = runtime.module(define, Inspector.into(document.body));
-
-</script>
+    <header>
+        <div class="logo">
+            <span class="glow">Directive<span class="accent">AI</span></span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#solutions">Solutions</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="glow">Cutting-Edge <span class="accent">AI & ML</span> Solutions</h1>
+            <p>We build custom artificial intelligence and machine learning solutions for visionary businesses. Discover the future — today.</p>
+            <a href="#contact" class="cta-btn">Start Your Project</a>
+        </div>
+        <div class="stars"></div>
+    </section>
+    <section id="solutions" class="section">
+        <h2 class="section-title">Our Capabilities</h2>
+        <div class="features">
+            <div class="feature-card">
+                <h3>Custom AI Development</h3>
+                <p>Tailored deep learning & data-driven solutions for your unique business challenges.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Machine Learning Integration</h3>
+                <p>Bring intelligence to your digital products with seamless ML integration.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Predictive Analytics</h3>
+                <p>Make informed decisions with state-of-the-art forecasting and insights.</p>
+            </div>
+        </div>
+    </section>
+    <section id="about" class="section">
+        <h2 class="section-title">About Us</h2>
+        <p class="about-text">
+            DirectiveAI is a team of passionate engineers and researchers dedicated to pushing the boundaries of artificial intelligence. Our mission: empower businesses to achieve the extraordinary through custom innovation.
+        </p>
+    </section>
+    <section id="contact" class="section">
+        <h2 class="section-title">Contact Us</h2>
+        <form class="contact-form">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="How can we help you?" required></textarea>
+            <button type="submit" class="cta-btn">Send Message</button>
+        </form>
+    </section>
+    <footer>
+        <p>&copy; 2025 DirectiveAI. All rights reserved.</p>
+    </footer>
+    <script>
+        // Number of stars in the field
+        const STAR_COUNT = 80;
+        const STAR_MIN_SPEED = 0.5; // slowest
+        const STAR_MAX_SPEED = 2.2; // fastest
+      
+        const starsContainer = document.querySelector('.stars');
+        const stars = [];
+      
+        function randomBetween(a, b) {
+          return a + Math.random() * (b - a);
+        }
+      
+        // Initialize each star with a random location and speed
+        for(let i=0; i<STAR_COUNT; i++) {
+          const star = document.createElement('div');
+          star.className = 'star';
+          starsContainer.appendChild(star);
+      
+          stars.push({
+            el: star,
+            x: randomBetween(0, 100), // vw
+            y: randomBetween(0, 60),  // vh
+            speed: randomBetween(STAR_MIN_SPEED, STAR_MAX_SPEED), // vh per second
+            size: randomBetween(1.2, 2.4)
+          });
+      
+          star.style.width = star.style.height = stars[i].size + 'px';
+        }
+      
+        function animateStars() {
+          for(const star of stars) {
+            // Move star downward based on its speed
+            star.y += star.speed * 0.016; // Assuming ~60fps (~16ms/frame)
+            if(star.y > 60) {
+              // Reset star to top with new random X and speed
+              star.y = 0;
+              star.x = randomBetween(0, 100);
+              star.speed = randomBetween(STAR_MIN_SPEED, STAR_MAX_SPEED);
+              star.size = randomBetween(1.2, 2.4);
+              star.el.style.width = star.el.style.height = star.size + 'px';
+            }
+            // Apply position
+            star.el.style.left = star.x + 'vw';
+            star.el.style.top = star.y + 'vh';
+          }
+          requestAnimationFrame(animateStars);
+        }
+        animateStars();
+      </script>      
+</body>
+</html>
