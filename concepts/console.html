@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Directive AI — Concept 07 · Console</title>
+  <meta name="description" content="Directive AI helps businesses adopt artificial intelligence safely, responsibly, and effectively." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3f1f7;          /* pale lavender-grey */
+      --bg-2: #eceaf3;
+      --ink: #16141d;
+      --ink-2: #3a3746;
+      --ink-3: #57546880;
+      --mute: #8b8798;        /* monospace labels */
+      --line: #dcd8e6;
+      --line-2: #cbc6da;
+      --rule-strong: #16141d;
+      --accent: #5a4be0;      /* restrained indigo, used sparingly */
+      --accent-soft: #ebe8fb;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: "Geist", system-ui, sans-serif; line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1,h2,h3 { margin: 0; font-weight: 500; letter-spacing: -0.02em; }
+    .mono { font-family: "Geist Mono", ui-monospace, monospace; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
+    .slabel { font-family: "Geist Mono", monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mute); font-weight: 500; }
+    .slabel .sl { color: var(--line-2); margin-right: 6px; }
+
+    /* ── Top bar ── */
+    .topbar { position: sticky; top: 0; z-index: 50; background: rgba(243,241,247,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .tb { display: flex; align-items: center; justify-content: space-between; height: 46px; font-family: "Geist Mono", monospace; font-size: 12px; letter-spacing: 0.02em; }
+    .tb .grp { display: flex; align-items: center; gap: 20px; }
+    .tb a { color: var(--ink-2); text-transform: uppercase; display: inline-flex; gap: 7px; transition: color .15s; }
+    .tb a .k { color: var(--mute); }
+    .tb a:hover { color: var(--accent); } .tb a:hover .k { color: var(--accent); }
+    .tb .brand { color: var(--ink); font-weight: 600; }
+    .tb .brand .k { color: var(--accent); }
+    @media (max-width: 860px) { .tb .mid { display: none; } }
+
+    /* ── Masthead / hero ── */
+    .masthead { padding: 54px 0 26px; border-bottom: 1px solid var(--line); }
+    .masthead .kicker { margin-bottom: 22px; }
+    .masthead h1 { font-size: clamp(44px, 7.4vw, 104px); line-height: 0.96; letter-spacing: -0.035em; font-weight: 600; max-width: 16ch; }
+    .masthead h1 .sup { font-size: 0.26em; vertical-align: super; color: var(--mute); font-family: "Geist Mono", monospace; letter-spacing: 0; font-weight: 500; }
+    .masthead .deck { margin-top: 26px; max-width: 60ch; font-size: 19px; color: var(--ink-2); }
+    .masthead .metaline { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: "Geist Mono", monospace; font-size: 12px; color: var(--mute); text-transform: uppercase; letter-spacing: 0.04em; }
+    .masthead .metaline .s { color: var(--line-2); }
+    .masthead .actions { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ── Buttons (bordered mono) ── */
+    .mbtn { font-family: "Geist Mono", monospace; font-size: 12.5px; letter-spacing: 0.02em; padding: 9px 16px; border: 1px solid var(--line-2); background: transparent; color: var(--ink); cursor: pointer; transition: all .16s; display: inline-flex; align-items: center; gap: 8px; }
+    .mbtn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .mbtn.solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .mbtn.solid:hover { background: var(--accent); border-color: var(--accent); }
+
+    /* ── Two-column layout ── */
+    .layout { display: grid; grid-template-columns: 248px 1fr; }
+    .side { border-right: 1px solid var(--line); padding: 34px 26px 60px 0; }
+    .side .stick { position: sticky; top: 70px; }
+    .side .block { margin-bottom: 30px; }
+    .side .slabel { margin-bottom: 14px; }
+    .tree { font-family: "Geist Mono", monospace; font-size: 12.5px; color: var(--ink-2); line-height: 2.0; }
+    .tree .grp-h { color: var(--ink); display: flex; gap: 8px; }
+    .tree .grp-h .tri { color: var(--mute); }
+    .tree .leaf { display: flex; align-items: center; gap: 8px; padding-left: 8px; color: var(--ink-2); transition: color .15s; }
+    .tree .leaf:hover { color: var(--accent); }
+    .tree .leaf .cx { color: var(--accent); }
+    .tree .leaf .ct { margin-left: auto; color: var(--mute); }
+    .tree .br { color: var(--line-2); }
+    .asciibox { font-family: "Geist Mono", monospace; font-size: 11px; line-height: 1.35; color: var(--mute); border: 1px solid var(--line); background: var(--bg-2); padding: 12px; white-space: pre; overflow: hidden; }
+    .side .kv { font-family: "Geist Mono", monospace; font-size: 12px; line-height: 1.95; }
+    .side .kv .k { color: var(--mute); }
+    .side .kv .v { color: var(--ink); }
+    .side .dot-ok { color: #2e9e6b; }
+
+    .main { padding: 34px 0 34px 36px; min-width: 0; }
+    .sec { margin-bottom: 56px; scroll-margin-top: 70px; }
+    .sec .shead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--rule-strong); margin-bottom: 4px; }
+    .sec .shead h2 { font-size: 15px; font-family: "Geist Mono", monospace; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+    .sec .shead .meta { font-family: "Geist Mono", monospace; font-size: 11px; color: var(--mute); }
+
+    /* Data table */
+    .thead { display: grid; grid-template-columns: 92px 1fr 34px; gap: 18px; padding: 9px 6px; font-family: "Geist Mono", monospace; font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid var(--line); }
+    .trow { display: grid; grid-template-columns: 92px 1fr 34px; gap: 18px; padding: 18px 6px; border-bottom: 1px solid var(--line); align-items: baseline; transition: background .14s; }
+    .trow:hover { background: var(--bg-2); }
+    .trow .id { font-family: "Geist Mono", monospace; font-size: 13px; color: var(--mute); padding-top: 2px; }
+    .trow .nm h3 { font-size: 19px; font-weight: 500; letter-spacing: -0.018em; }
+    .trow:hover .nm h3 { color: var(--accent); }
+    .trow .nm .sub { margin-top: 6px; font-family: "Geist Mono", monospace; font-size: 11.5px; color: var(--mute); letter-spacing: 0.01em; }
+    .trow .pl { text-align: right; font-family: "Geist Mono", monospace; font-size: 18px; color: var(--line-2); }
+    .trow:hover .pl { color: var(--accent); }
+
+    /* Method list */
+    .mrow { display: grid; grid-template-columns: 92px 1fr 150px; gap: 18px; padding: 15px 6px; border-bottom: 1px solid var(--line); align-items: baseline; }
+    .mrow .id { font-family: "Geist Mono", monospace; font-size: 13px; color: var(--accent); }
+    .mrow .nm { font-size: 16px; }
+    .mrow .nm b { font-weight: 600; }
+    .mrow .nm span { color: var(--ink-2); }
+    .mrow .out { font-family: "Geist Mono", monospace; font-size: 11.5px; color: var(--mute); text-align: right; }
+
+    /* Metadata (about) */
+    .about { display: grid; grid-template-columns: 280px 1fr; gap: 40px; }
+    .about .kv { font-family: "Geist Mono", monospace; font-size: 12.5px; line-height: 2.05; }
+    .about .kv .r { display: grid; grid-template-columns: 130px 1fr; gap: 10px; border-bottom: 1px dashed var(--line); padding: 3px 0; }
+    .about .kv .k { color: var(--mute); text-transform: uppercase; letter-spacing: 0.03em; }
+    .about .kv .v { color: var(--ink); }
+    .about .art p { margin: 0 0 16px; font-size: 16px; line-height: 1.7; color: var(--ink-2); max-width: 62ch; }
+    .about .art a.ul { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-2); }
+    .about .art .btns { margin-top: 22px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* CTA strip */
+    .ctastrip { border-top: 2px solid var(--rule-strong); border-bottom: 1px solid var(--line); padding: 40px 0; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .ctastrip h2 { font-size: clamp(24px, 3vw, 38px); letter-spacing: -0.025em; font-weight: 600; max-width: 20ch; }
+    .ctastrip .r { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Footer */
+    footer { padding: 30px 0 50px; }
+    .foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-family: "Geist Mono", monospace; font-size: 12px; color: var(--mute); }
+    .foot a:hover { color: var(--accent); }
+    .foot .grp { display: flex; gap: 18px; flex-wrap: wrap; }
+
+    @media (max-width: 860px) {
+      .wrap { padding: 0 18px; }
+      .layout { grid-template-columns: 1fr; }
+      .side { border-right: 0; border-bottom: 1px solid var(--line); padding: 26px 0 30px; }
+      .side .stick { position: static; }
+      .main { padding: 30px 0; }
+      .about { grid-template-columns: 1fr; gap: 26px; }
+      .trow, .thead { grid-template-columns: 70px 1fr 24px; gap: 12px; }
+      .mrow { grid-template-columns: 60px 1fr; }
+      .mrow .out { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="wrap tb">
+      <div class="grp">
+        <a href="#" class="brand"><span class="k">[D]</span> Directive&nbsp;AI</a>
+      </div>
+      <div class="grp mid">
+        <a href="#services"><span class="k">[1]</span> Services</a>
+        <a href="#method"><span class="k">[2]</span> Method</a>
+        <a href="#insights"><span class="k">[3]</span> Insights</a>
+        <a href="#about"><span class="k">[4]</span> About</a>
+      </div>
+      <div class="grp">
+        <a href="#contact"><span class="k">[C]</span> Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="wrap">
+      <div class="slabel kicker"><span class="sl">/</span>AI advisory &amp; implementation</div>
+      <h1>Adopt&nbsp;AI with&nbsp;intent.<span class="sup">(v1.0)</span></h1>
+      <p class="deck">Directive AI helps organisations put artificial intelligence to work — safely, responsibly, and with measurable results. Strategy, engineering, and governance from a single partner who sees the whole picture.</p>
+      <div class="metaline">
+        <span>EST. 2026</span><span class="s">/</span>
+        <span>VENDOR-NEUTRAL</span><span class="s">/</span>
+        <span>4 PRACTICE AREAS</span><span class="s">/</span>
+        <span>GOVERNANCE BY DEFAULT</span><span class="s">/</span>
+        <span>directiveai.co</span>
+      </div>
+      <div class="actions">
+        <a href="#contact" class="mbtn solid">Book a consult →</a>
+        <a href="#services" class="mbtn">Browse services</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="wrap layout">
+    <!-- Sidebar -->
+    <aside class="side">
+      <div class="stick">
+        <div class="block">
+          <div class="slabel"><span class="sl">/</span>Index</div>
+          <div class="tree">
+            <div class="grp-h"><span class="tri">▾</span> Practice</div>
+            <a class="leaf" href="#services"><span class="br">└</span><span class="cx">[x]</span> Strategy <span class="ct">(3)</span></a>
+            <a class="leaf" href="#services"><span class="br">└</span><span class="cx">[x]</span> Governance <span class="ct">(3)</span></a>
+            <a class="leaf" href="#services"><span class="br">└</span><span class="cx">[x]</span> Implementation <span class="ct">(3)</span></a>
+            <a class="leaf" href="#services"><span class="br">└</span><span class="cx">[x]</span> Enablement <span class="ct">(3)</span></a>
+            <div class="grp-h" style="margin-top:10px"><span class="tri">▾</span> Method</div>
+            <a class="leaf" href="#method"><span class="br">└</span> 01 Assess</a>
+            <a class="leaf" href="#method"><span class="br">└</span> 02 Strategise</a>
+            <a class="leaf" href="#method"><span class="br">└</span> 03 Implement</a>
+            <a class="leaf" href="#method"><span class="br">└</span> 04 Enable</a>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="asciibox">┌─ DIRECTIVE ──────┐
+│ assess ░░▒▒▓▓    │
+│ strategise  ▓▓   │
+│ implement ▒▓▓▓   │
+│ enable → scale   │
+└──────────────────┘</div>
+        </div>
+
+        <div class="block">
+          <div class="slabel"><span class="sl">/</span>Status</div>
+          <div class="kv">
+            <div><span class="k">AVAILABILITY: </span><span class="v"><span class="dot-ok">●</span> OPEN</span></div>
+            <div><span class="k">RESPONSE: </span><span class="v">&lt; 1 DAY</span></div>
+            <div><span class="k">MODE: </span><span class="v">REMOTE / ONSITE</span></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main column -->
+    <main class="main">
+      <!-- Services -->
+      <section id="services" class="sec">
+        <div class="shead"><h2>/ Services</h2><span class="meta">4 areas · end to end</span></div>
+        <div class="thead"><span>/ ID</span><span>/ Service</span><span>+</span></div>
+        <a class="trow" href="#contact">
+          <span class="id">10–19</span>
+          <div class="nm"><h3>AI Strategy &amp; Roadmap</h3><div class="sub">11.01 opportunity assessment · 11.02 prioritised roadmap · 12.01 ROI model</div></div>
+          <span class="pl">+</span>
+        </a>
+        <a class="trow" href="#contact">
+          <span class="id">20–29</span>
+          <div class="nm"><h3>Responsible AI &amp; Governance</h3><div class="sub">21.01 risk &amp; policy · 21.02 safety guardrails · 22.01 privacy &amp; oversight</div></div>
+          <span class="pl">+</span>
+        </a>
+        <a class="trow" href="#contact">
+          <span class="id">30–39</span>
+          <div class="nm"><h3>Implementation &amp; Integration</h3><div class="sub">31.01 pilot build · 31.02 production &amp; MLOps · 32.01 systems integration</div></div>
+          <span class="pl">+</span>
+        </a>
+        <a class="trow" href="#contact">
+          <span class="id">40–49</span>
+          <div class="nm"><h3>Enablement &amp; Training</h3><div class="sub">41.01 executive literacy · 41.02 team upskilling · 42.01 capability transfer</div></div>
+          <span class="pl">+</span>
+        </a>
+      </section>
+
+      <!-- Method -->
+      <section id="method" class="sec">
+        <div class="shead"><h2>/ Method</h2><span class="meta">transparent · no black boxes</span></div>
+        <div class="mrow"><span class="id">01</span><div class="nm"><b>Assess</b> — <span>map goals, data, and constraints to find where AI is worth it</span></div><span class="out">→ output: brief</span></div>
+        <div class="mrow"><span class="id">02</span><div class="nm"><b>Strategise</b> — <span>a sequenced roadmap with value, risk, and ownership</span></div><span class="out">→ output: roadmap</span></div>
+        <div class="mrow"><span class="id">03</span><div class="nm"><b>Implement</b> — <span>production-ready systems, integrated and governed</span></div><span class="out">→ output: system</span></div>
+        <div class="mrow"><span class="id">04</span><div class="nm"><b>Enable</b> — <span>we hand over capability, not dependency</span></div><span class="out">→ output: capability</span></div>
+      </section>
+
+      <!-- Insights (mirrors stripe.dev/blog list) -->
+      <section id="insights" class="sec">
+        <div class="shead"><h2>/ Insights</h2><span class="meta">notes from production</span></div>
+        <div class="thead"><span>/ Date</span><span>/ Name</span><span>+</span></div>
+        <a class="trow" href="#">
+          <span class="id">2026.06.09</span>
+          <div class="nm"><h3>Designing guardrails: responsible AI as code</h3><div class="sub">engineering · governance</div></div>
+          <span class="pl">+</span>
+        </a>
+        <a class="trow" href="#">
+          <span class="id">2026.06.02</span>
+          <div class="nm"><h3>From pilot to production: an MLOps checklist</h3><div class="sub">best practices · mlops</div></div>
+          <span class="pl">+</span>
+        </a>
+        <a class="trow" href="#">
+          <span class="id">2026.05.24</span>
+          <div class="nm"><h3>Evaluating LLMs you can actually trust</h3><div class="sub">research · testing</div></div>
+          <span class="pl">+</span>
+        </a>
+        <a class="trow" href="#">
+          <span class="id">2026.05.11</span>
+          <div class="nm"><h3>A mental model for AI return on investment</h3><div class="sub">strategy · advisory</div></div>
+          <span class="pl">+</span>
+        </a>
+      </section>
+
+      <!-- About (mirrors / METADATA + / ARTICLE) -->
+      <section id="about" class="sec">
+        <div class="shead"><h2>/ About</h2><span class="meta">the firm</span></div>
+        <div class="about">
+          <div class="kv">
+            <div class="r"><span class="k">Founded</span><span class="v">2026</span></div>
+            <div class="r"><span class="k">Discipline</span><span class="v">AI advisory + eng.</span></div>
+            <div class="r"><span class="k">Stance</span><span class="v">Vendor-neutral</span></div>
+            <div class="r"><span class="k">Default</span><span class="v">Responsible by design</span></div>
+            <div class="r"><span class="k">Scope</span><span class="v">Strategy → scale</span></div>
+            <div class="r"><span class="k">Sectors</span><span class="v">Finance, health, SaaS</span></div>
+            <div class="r"><span class="k">Contact</span><span class="v">hello@directiveai.co</span></div>
+          </div>
+          <div class="art">
+            <p>Directive AI is a team of engineers, researchers, and strategists who have delivered artificial intelligence in regulated, high-stakes environments. We have seen exactly where AI projects quietly fail — in the gaps between strategy and delivery — and we built the firm to close them.</p>
+            <p>We are vendor-neutral by principle and pragmatic by habit, recommending what genuinely serves your business rather than a platform's incentives. Safety, privacy, and governance are designed in from the first line, and we transfer capability as we go — so the advantage stays with you. The result: AI that becomes a <a class="ul" href="#contact">directive advantage</a>, never a liability.</p>
+            <div class="btns">
+              <a href="mailto:hello@directiveai.co" class="mbtn solid">Book a consult →</a>
+              <a href="mailto:hello@directiveai.co" class="mbtn">hello@directiveai.co</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section id="contact" class="ctastrip">
+        <h2>Ready to give your AI a system?</h2>
+        <div class="r">
+          <a href="mailto:hello@directiveai.co" class="mbtn solid">Start the conversation →</a>
+          <a href="#services" class="mbtn">Browse services</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap foot">
+      <div class="grp">
+        <span>© 2026 DIRECTIVE AI</span>
+        <a href="#services">SERVICES</a>
+        <a href="#method">METHOD</a>
+        <a href="#insights">INSIGHTS</a>
+        <a href="#about">ABOUT</a>
+      </div>
+      <span>directiveai.co · v1.0 · MMXXVI</span>
+    </div>
+  </footer>
+</body>
+</html>
