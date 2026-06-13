@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Directive AI — Concept 06 · Prism</title>
+  <meta name="description" content="Directive AI helps businesses adopt artificial intelligence safely, responsibly, and effectively." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0a2540;          /* Stripe navy */
+      --slate: #425466;        /* body */
+      --slate-2: #697386;
+      --mute: #8792a2;
+      --blurple: #635bff;      /* Stripe accent */
+      --blurple-deep: #4f47e0;
+      --sky: #f6f9fc;          /* light section */
+      --line: #e6ebf1;
+      --white: #ffffff;
+      --grad: linear-gradient(110deg, #2ec6e6 0%, #4f7cff 24%, #635bff 44%, #8b5cf6 60%, #d44ce0 78%, #ff8a5b 100%);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--white); color: var(--ink);
+      font-family: "Inter", system-ui, sans-serif; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; letter-spacing: -0.011em;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1,h2,h3 { margin: 0; font-weight: 700; letter-spacing: -0.022em; }
+    .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+    .wrap { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+    .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; color: var(--blurple); }
+    .link { color: var(--blurple); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+    .link:hover { color: var(--blurple-deep); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; padding: 11px 22px; border-radius: 100px; cursor: pointer; transition: all .2s; }
+    .btn-blurple { background: var(--blurple); color: #fff; box-shadow: 0 4px 12px rgba(99,91,255,0.32); }
+    .btn-blurple:hover { background: var(--blurple-deep); transform: translateY(-1px); }
+    .btn-white { background: #fff; color: var(--ink); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10,37,64,0.18); }
+    .btn-ghostw { color: #fff; border: 1px solid rgba(255,255,255,0.5); }
+    .btn-ghostw:hover { background: rgba(255,255,255,0.12); }
+
+    /* ── Hero w/ Stripe gradient + angled cut ── */
+    .hero { position: relative; background: var(--grad); color: #fff; padding: 0 0 150px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 80px)); }
+    .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,37,64,0.16), rgba(10,37,64,0) 40%); pointer-events: none; }
+    .hero > * { position: relative; z-index: 2; }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 19px; color: #fff; }
+    .brand .m { width: 26px; height: 26px; border-radius: 8px; background: rgba(255,255,255,0.9); display: grid; place-items: center; color: var(--blurple); font-size: 14px; font-weight: 800; }
+    .navlinks { display: flex; align-items: center; gap: 30px; }
+    .navlinks a { font-size: 15px; color: rgba(255,255,255,0.9); font-weight: 500; }
+    .navlinks a:hover { color: #fff; }
+    .navlinks .btn-white { font-size: 14px; padding: 9px 18px; color: var(--ink); }
+
+    .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; padding-top: 64px; }
+    .hero .eyebrow { color: rgba(255,255,255,0.92); }
+    .hero h1 { font-size: clamp(44px, 6vw, 76px); line-height: 1.02; margin: 20px 0 0; color: #fff; }
+    .hero .lede { margin-top: 24px; font-size: 20px; line-height: 1.5; color: rgba(255,255,255,0.92); max-width: 44ch; }
+    .hero .actions { margin-top: 34px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* Code panel (nod to the engineering blog article) */
+    .code { border-radius: 14px; background: #0a1f3c; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 60px rgba(8,20,40,0.4); overflow: hidden; }
+    .code .top { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .code .top i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+    .code .top i:nth-child(1){ background:#ff5f57 } .code .top i:nth-child(2){ background:#febc2e } .code .top i:nth-child(3){ background:#28c840 }
+    .code .top .file { margin-left: 8px; font-family: "JetBrains Mono", monospace; font-size: 12px; color: #8aa0c6; }
+    .code pre { margin: 0; padding: 20px 22px; font-family: "JetBrains Mono", monospace; font-size: 13px; line-height: 1.85; color: #c9d6ee; overflow-x: auto; }
+    .tk { color:#8aa0c6 } .tk-k{ color:#b18bff } .tk-s{ color:#7fdab0 } .tk-p{ color:#7fb0ff } .tk-f{ color:#ffd479 } .tk-c{ color:#5d7299; font-style: italic }
+
+    /* ── Trust strip ── */
+    .trust { padding: 30px 0 8px; }
+    .trust .row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 30px; }
+    .trust .lbl { font-family: "JetBrains Mono", monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mute); }
+    .trust .name { font-weight: 600; color: var(--slate); font-size: 15px; }
+
+    /* ── Sections ── */
+    section { scroll-margin-top: 90px; }
+    .band { padding: 92px 0; }
+    .band.sky { background: var(--sky); }
+    .sec-head { max-width: 60ch; margin-bottom: 50px; }
+    .sec-head h2 { font-size: clamp(30px, 4vw, 46px); line-height: 1.07; margin-top: 16px; }
+    .sec-head p { margin: 16px 0 0; font-size: 18px; color: var(--slate); }
+
+    /* Services cards */
+    .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 30px 28px; transition: transform .2s, box-shadow .2s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(10,37,64,0.10); }
+    .card .ic { width: 44px; height: 44px; border-radius: 11px; display: grid; place-items: center; background: rgba(99,91,255,0.10); margin-bottom: 20px; }
+    .card .ic svg { width: 22px; height: 22px; }
+    .card h3 { font-size: 20px; }
+    .card p { margin: 10px 0 16px; color: var(--slate); font-size: 15px; }
+
+    /* Approach steps */
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .stp { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 24px 22px 26px; position: relative; }
+    .stp .n { font-family: "JetBrains Mono", monospace; font-weight: 600; color: var(--blurple); font-size: 14px; }
+    .stp h3 { font-size: 18px; margin: 14px 0 9px; }
+    .stp p { margin: 0; font-size: 14px; color: var(--slate); }
+
+    /* Insights / blog cards (mirrors stripe.dev/blog) */
+    .posts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .post { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+    .post:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(10,37,64,0.10); }
+    .post .thumb { height: 96px; background: var(--grad); }
+    .post .pb { padding: 22px 22px 24px; display: flex; flex-direction: column; flex: 1; }
+    .post .tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 12px; }
+    .post .tag { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 500; color: var(--blurple); background: rgba(99,91,255,0.09); padding: 3px 9px; border-radius: 100px; }
+    .post h3 { font-size: 18px; line-height: 1.25; }
+    .post p { margin: 10px 0 16px; font-size: 14px; color: var(--slate); flex: 1; }
+    .post .by { display: flex; align-items: center; gap: 10px; }
+    .post .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 11px; font-weight: 700; background: var(--ink); }
+    .post .meta { font-size: 12.5px; color: var(--mute); }
+    .post .meta b { color: var(--slate); font-weight: 600; }
+
+    /* About / stats */
+    .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+    .about-grid h2 { font-size: clamp(28px, 3.6vw, 42px); line-height: 1.08; }
+    .about-grid p { color: var(--slate); font-size: 17px; margin-top: 18px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .stat { background: #fff; padding: 28px 26px; }
+    .stat .v { font-size: 34px; font-weight: 700; letter-spacing: -0.03em; color: var(--ink); }
+    .stat .v span { color: var(--blurple); }
+    .stat .k { margin-top: 8px; font-size: 14px; color: var(--slate); }
+
+    /* CTA gradient band */
+    .cta { position: relative; background: var(--grad); color: #fff; padding: 110px 0; margin-top: 40px; clip-path: polygon(0 80px, 100% 0, 100% 100%, 0 100%); }
+    .cta::after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(10,37,64,0.10), transparent 40%); pointer-events:none; }
+    .cta > * { position: relative; z-index: 2; }
+    .cta h2 { font-size: clamp(32px, 4.6vw, 56px); line-height: 1.05; color: #fff; max-width: 18ch; }
+    .cta p { margin: 20px 0 32px; font-size: 19px; color: rgba(255,255,255,0.92); max-width: 46ch; }
+
+    /* Footer (Stripe navy, multi-col) */
+    footer { background: var(--ink); color: #adb8cc; padding: 64px 0 48px; }
+    .fcols { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 36px; }
+    footer .brand { color: #fff; }
+    footer .brand .m { background: var(--blurple); color: #fff; }
+    .fcols p { margin: 14px 0 0; font-size: 14px; max-width: 30ch; color: #8c98ad; }
+    .fcol h4 { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #6f7d94; font-weight: 500; margin: 0 0 14px; }
+    .fcol a { display: block; font-size: 14px; color: #adb8cc; padding: 5px 0; }
+    .fcol a:hover { color: #fff; }
+    .fbottom { margin-top: 46px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.10); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; color: #6f7d94; }
+
+    @media (max-width: 900px) {
+      .wrap { padding: 0 20px; }
+      .navlinks a:not(.btn) { display: none; }
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero { padding-bottom: 120px; clip-path: polygon(0 0,100% 0,100% 100%,0 calc(100% - 48px)); }
+      .cards, .posts { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .fcols { grid-template-columns: 1fr 1fr; }
+      .band { padding: 64px 0; }
+    }
+    @media (max-width: 540px) { .steps, .stats, .fcols { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <!-- Hero -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="nav">
+        <a href="#" class="brand"><span class="m">D</span>Directive AI</a>
+        <nav class="navlinks">
+          <a href="#services">Services</a>
+          <a href="#approach">Approach</a>
+          <a href="#insights">Insights</a>
+          <a href="#about">About</a>
+          <a href="#contact" class="btn btn-white">Book a consult</a>
+        </nav>
+      </div>
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">AI advisory &amp; engineering</p>
+          <h1>AI adoption,<br>engineered for trust.</h1>
+          <p class="lede">Directive AI brings product-grade engineering and governance to artificial intelligence — so you ship AI that's safe, compliant, and genuinely useful, from first pilot to production.</p>
+          <div class="actions">
+            <a href="#contact" class="btn btn-white">Start the conversation →</a>
+            <a href="#insights" class="btn btn-ghostw">Read our engineering notes</a>
+          </div>
+        </div>
+        <div class="code" aria-hidden="true">
+          <div class="top"><i></i><i></i><i></i><span class="file mono">directive.policy.ts</span></div>
+          <pre class="mono"><span class="tk-c">// Responsible AI, defined as code</span>
+<span class="tk-k">export const</span> <span class="tk-p">policy</span> = <span class="tk-f">defineAIPolicy</span>({
+  model:      <span class="tk-s">"trusted-by-default"</span>,
+  guardrails: [<span class="tk-s">"pii"</span>, <span class="tk-s">"safety"</span>, <span class="tk-s">"audit"</span>],
+  review:     <span class="tk-s">"human-in-the-loop"</span>,
+  rollout:    { stage: <span class="tk-s">"pilot"</span>, <span class="tk-p">guarded</span>: <span class="tk-k">true</span> },
+});
+
+<span class="tk-c">// ✓ governed   ✓ observable   ✓ reversible</span></pre>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Trust -->
+  <section class="trust">
+    <div class="wrap row">
+      <span class="lbl">Trusted across</span>
+      <span class="name">Financial services</span>
+      <span class="name">Healthcare</span>
+      <span class="name">Logistics</span>
+      <span class="name">SaaS &amp; technology</span>
+      <span class="name">Public sector</span>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">What we do</span>
+        <h2>Everything you need to adopt AI with confidence.</h2>
+        <p>Four connected disciplines that take you from first question to dependable, governed AI in production.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#635bff" stroke-width="1.7"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="3.4"/></svg></div>
+          <h3>AI Strategy &amp; Roadmap</h3>
+          <p>We find where AI creates real value, separate signal from hype, and build a prioritised plan you can act on quarter by quarter.</p>
+          <a class="link" href="#contact">Learn more →</a>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#635bff" stroke-width="1.7"><path d="M12 3l7 3v6c0 4-3 6.5-7 8-4-1.5-7-4-7-8V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3>Responsible AI &amp; Governance</h3>
+          <p>Policy, risk, and safety guardrails so you move fast without compromising trust, compliance, or customer confidence.</p>
+          <a class="link" href="#contact">Learn more →</a>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#635bff" stroke-width="1.7"><path d="M7 8l-4 4 4 4M17 8l4 4-4 4M14 4l-4 16"/></svg></div>
+          <h3>Implementation &amp; Integration</h3>
+          <p>Production engineering that embeds AI into your data, workflows, and systems — observable, secure, and built to scale.</p>
+          <a class="link" href="#contact">Learn more →</a>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#635bff" stroke-width="1.7"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/><path d="M16 4a3 3 0 010 6"/></svg></div>
+          <h3>Enablement &amp; Training</h3>
+          <p>We upskill your teams so adoption sticks and compounds — turning AI from a one-off project into a capability you own.</p>
+          <a class="link" href="#contact">Learn more →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Approach -->
+  <section id="approach" class="band sky">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">How we work</span>
+        <h2>A clear path, no black boxes.</h2>
+        <p>Every engagement follows the same transparent arc — so you always know where you are and what comes next.</p>
+      </div>
+      <div class="steps">
+        <div class="stp"><div class="n">01 · Assess</div><h3>Understand</h3><p>Map goals, data, and constraints to find where AI is truly worth it.</p></div>
+        <div class="stp"><div class="n">02 · Strategise</div><h3>Prioritise</h3><p>A sequenced roadmap with value, risk, and ownership per initiative.</p></div>
+        <div class="stp"><div class="n">03 · Implement</div><h3>Build</h3><p>Production-ready systems, integrated into your stack with guardrails.</p></div>
+        <div class="stp"><div class="n">04 · Enable</div><h3>Scale</h3><p>We hand over capability, not dependency — your teams run it.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Insights / engineering blog -->
+  <section id="insights" class="band">
+    <div class="wrap">
+      <div class="sec-head" style="display:flex;justify-content:space-between;align-items:flex-end;max-width:none;gap:24px;flex-wrap:wrap">
+        <div style="max-width:52ch">
+          <span class="eyebrow">From the notebook</span>
+          <h2>Engineering notes &amp; field insights.</h2>
+          <p>Deep-dives, checklists, and lessons from putting AI into production responsibly.</p>
+        </div>
+        <a class="link" href="#" style="font-size:16px">View all insights →</a>
+      </div>
+      <div class="posts">
+        <article class="post">
+          <div class="thumb"></div>
+          <div class="pb">
+            <div class="tags"><span class="tag">Engineering</span><span class="tag">Governance</span></div>
+            <h3>Designing guardrails: responsible AI as code</h3>
+            <p>How we encode safety, privacy, and audit requirements as policy that ships and scales with your systems.</p>
+            <div class="by"><span class="av">DA</span><span class="meta"><b>Directive AI</b> · Jun 9, 2026</span></div>
+          </div>
+        </article>
+        <article class="post">
+          <div class="thumb"></div>
+          <div class="pb">
+            <div class="tags"><span class="tag">Best Practices</span><span class="tag">MLOps</span></div>
+            <h3>From pilot to production: an MLOps checklist</h3>
+            <p>The 12 things that separate a promising demo from a dependable, observable system in production.</p>
+            <div class="by"><span class="av">DA</span><span class="meta"><b>Directive AI</b> · Jun 2, 2026</span></div>
+          </div>
+        </article>
+        <article class="post">
+          <div class="thumb"></div>
+          <div class="pb">
+            <div class="tags"><span class="tag">Research</span><span class="tag">Testing</span></div>
+            <h3>Evaluating LLMs you can actually trust</h3>
+            <p>A practical framework for measuring quality, safety, and regression before anything reaches a customer.</p>
+            <div class="by"><span class="av">DA</span><span class="meta"><b>Directive AI</b> · May 24, 2026</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="band sky">
+    <div class="wrap about-grid">
+      <div>
+        <span class="eyebrow">About Directive AI</span>
+        <h2>We make AI a directive advantage — never a liability.</h2>
+        <p>We're a team of engineers, researchers, and strategists who have shipped AI in regulated, high-stakes environments. Vendor-neutral by principle and pragmatic by habit, we recommend what genuinely serves your business — not the latest trend.</p>
+        <a class="link" href="#contact" style="font-size:16px;margin-top:18px">Work with us →</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="v">100<span>%</span></div><div class="k">Vendor-neutral, independent advice</div></div>
+        <div class="stat"><div class="v">Day&nbsp;<span>0</span></div><div class="k">Governance designed in, not bolted on</div></div>
+        <div class="stat"><div class="v">4</div><div class="k">Disciplines, strategy to scale</div></div>
+        <div class="stat"><div class="v">E2E</div><div class="k">Pilot to production, one partner</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA gradient band -->
+  <section id="contact" class="cta">
+    <div class="wrap">
+      <p class="eyebrow" style="color:rgba(255,255,255,0.92)">Let's begin</p>
+      <h2>Ready to make AI work for you?</h2>
+      <p>Tell us where you are today. We'll help you find the clearest path forward — starting with a no-obligation conversation.</p>
+      <div class="actions" style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="mailto:hello@directiveai.co" class="btn btn-white">Book a consultation →</a>
+        <a href="mailto:hello@directiveai.co" class="btn btn-ghostw">hello@directiveai.co</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div class="fcols">
+        <div>
+          <a href="#" class="brand"><span class="m">D</span>Directive AI</a>
+          <p>Product-grade engineering and governance for trustworthy AI.</p>
+        </div>
+        <div class="fcol"><h4>Company</h4><a href="#about">About</a><a href="#approach">Approach</a><a href="#insights">Insights</a></div>
+        <div class="fcol"><h4>Services</h4><a href="#services">Strategy</a><a href="#services">Governance</a><a href="#services">Implementation</a><a href="#services">Enablement</a></div>
+        <div class="fcol"><h4>Contact</h4><a href="mailto:hello@directiveai.co">hello@directiveai.co</a><a href="#contact">Book a consult</a></div>
+      </div>
+      <div class="fbottom">
+        <span>© 2026 Directive AI. All rights reserved.</span>
+        <span>Safe, effective AI for forward-looking businesses.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

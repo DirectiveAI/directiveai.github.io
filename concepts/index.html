@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Directive AI — Design Concepts</title>
+  <meta name="description" content="Three professional design directions for the Directive AI website." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0d10;
+      --panel: #141519;
+      --stroke: rgba(255,255,255,0.10);
+      --stroke-2: rgba(255,255,255,0.18);
+      --text: #f1f2f5;
+      --soft: #a6a9b4;
+      --mute: #6f7380;
+      --accent: #7c8bff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: "Inter", system-ui, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1,h2,h3 { margin: 0; font-family: "Space Grotesk", sans-serif; letter-spacing: -0.02em; font-weight: 600; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 40px; }
+    .eyebrow { font-family: "Space Grotesk"; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+
+    header { border-bottom: 1px solid var(--stroke); padding: 22px 0; position: sticky; top: 0; background: rgba(12,13,16,0.85); backdrop-filter: blur(12px); z-index: 30; }
+    .topnav { display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-family: "Space Grotesk"; font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+    .brand .m { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, #6e7bff, #3fd8d0); }
+    .topnav .live { font-size: 13px; color: var(--soft); border: 1px solid var(--stroke); padding: 7px 14px; border-radius: 8px; }
+    .topnav .live:hover { border-color: var(--stroke-2); color: var(--text); }
+
+    .intro { padding: 84px 0 56px; max-width: 760px; }
+    .intro h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.04; margin: 22px 0 0; }
+    .intro p { color: var(--soft); font-size: 18px; margin: 24px 0 0; }
+    .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+    .legend a { font-size: 13px; color: var(--soft); border: 1px solid var(--stroke); padding: 8px 15px; border-radius: 100px; transition: .2s; }
+    .legend a:hover { border-color: var(--stroke-2); color: var(--text); }
+
+    .concept { padding: 40px 0 70px; border-top: 1px solid var(--stroke); }
+    .c-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 26px; }
+    .c-head .l { max-width: 640px; }
+    .c-num { font-family: "Space Grotesk"; font-size: 13px; color: var(--mute); letter-spacing: 0.1em; }
+    .c-head h2 { font-size: clamp(26px, 3.6vw, 40px); margin: 10px 0 0; }
+    .c-head .desc { color: var(--soft); margin: 14px 0 0; font-size: 16px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tag { font-size: 12px; color: var(--soft); background: var(--panel); border: 1px solid var(--stroke); padding: 5px 11px; border-radius: 7px; font-family: "Space Grotesk"; }
+    .c-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .btn { font-family: "Space Grotesk"; font-weight: 500; font-size: 14px; padding: 11px 18px; border-radius: 10px; transition: .25s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: linear-gradient(100deg, #3fd8d0, #6e7bff); color: #06080f; }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-ghost { border: 1px solid var(--stroke-2); color: var(--text); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.05); }
+
+    /* Live preview frame, scaled */
+    .preview {
+      position: relative; border: 1px solid var(--stroke); border-radius: 16px; overflow: hidden;
+      background: #0a0a0a; aspect-ratio: 16 / 10; box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+    .preview .bar { height: 38px; display: flex; align-items: center; gap: 7px; padding: 0 16px; background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--stroke); position: relative; z-index: 2; }
+    .preview .bar i { width: 11px; height: 11px; border-radius: 50%; background: #3a3b40; display: inline-block; }
+    .preview .bar .url { margin-left: 12px; font-size: 12px; color: var(--mute); font-family: "Space Grotesk"; }
+    .frame-clip { position: absolute; inset: 38px 0 0 0; overflow: hidden; }
+    .frame-clip iframe {
+      width: 1440px; height: 1900px; border: 0; transform-origin: top left;
+      pointer-events: none; background: #fff;
+    }
+    .preview a.cover { position: absolute; inset: 0; z-index: 3; }
+
+    footer { border-top: 1px solid var(--stroke); padding: 40px 0 60px; color: var(--mute); font-size: 13px; }
+    .foot { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+
+    @media (max-width: 760px) {
+      .wrap { padding: 0 22px; }
+      .c-actions { width: 100%; }
+      .preview { aspect-ratio: 4 / 5; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topnav">
+      <a href="#" class="brand"><span class="m"></span>DirectiveAI · Concepts</a>
+      <a href="../index.html" class="live">View current live site →</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <span class="eyebrow">Website redesign · 7 directions</span>
+      <h1>Seven professional looks for Directive AI.</h1>
+      <p>Each concept is a complete, working homepage built on the same elevated copy — positioning Directive AI as the partner for safe, effective AI adoption. Compare them below, then open any one full-screen. Concept 01 is the clean, Scandinavian direction.</p>
+      <div class="legend">
+        <a href="#nordic">01 · Nordic</a>
+        <a href="#atlas">02 · Atlas</a>
+        <a href="#aurora">03 · Aurora</a>
+        <a href="#folio">04 · Folio</a>
+        <a href="#decimal">05 · Decimal</a>
+        <a href="#prism">06 · Prism</a>
+        <a href="#console">07 · Console</a>
+      </div>
+    </section>
+
+    <!-- 01 Nordic -->
+    <section id="nordic" class="concept">
+      <div class="c-head">
+        <div class="l">
+          <div class="c-num">CONCEPT 01</div>
+          <h2>Nordic — clean &amp; Scandinavian</h2>
+          <p class="desc">Calm, precise, and quietly confident. Warm off-white canvas, hairline rules, generous whitespace, and a single muted-sage accent. Honest typography over decoration — the look of considered, trustworthy expertise.</p>
+          <div class="tags"><span class="tag">Minimal</span><span class="tag">Warm neutrals</span><span class="tag">Editorial sans + serif</span><span class="tag">Whitespace-led</span></div>
+        </div>
+        <div class="c-actions">
+          <a class="btn btn-primary" href="nordic.html" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="bar"><i></i><i></i><i></i><span class="url">directiveai.co — Nordic</span></div>
+        <div class="frame-clip"><iframe data-src="nordic.html" loading="lazy" title="Nordic concept"></iframe></div>
+        <a class="cover" href="nordic.html" target="_blank" rel="noopener" aria-label="Open Nordic concept"></a>
+      </div>
+    </section>
+
+    <!-- 02 Atlas -->
+    <section id="atlas" class="concept">
+      <div class="c-head">
+        <div class="l">
+          <div class="c-num">CONCEPT 02</div>
+          <h2>Atlas — editorial authority</h2>
+          <p class="desc">The look of an established advisory firm. Deep navy and ivory, a refined serif for headlines, brass accents, and a structured, numbered layout. Conveys gravitas, governance, and enterprise credibility.</p>
+          <div class="tags"><span class="tag">Navy + brass</span><span class="tag">Serif display</span><span class="tag">Authoritative</span><span class="tag">Enterprise</span></div>
+        </div>
+        <div class="c-actions">
+          <a class="btn btn-primary" href="atlas.html" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="bar"><i></i><i></i><i></i><span class="url">directiveai.co — Atlas</span></div>
+        <div class="frame-clip"><iframe data-src="atlas.html" loading="lazy" title="Atlas concept"></iframe></div>
+        <a class="cover" href="atlas.html" target="_blank" rel="noopener" aria-label="Open Atlas concept"></a>
+      </div>
+    </section>
+
+    <!-- 03 Aurora -->
+    <section id="aurora" class="concept">
+      <div class="c-head">
+        <div class="l">
+          <div class="c-num">CONCEPT 03</div>
+          <h2>Aurora — modern &amp; premium</h2>
+          <p class="desc">A contemporary, high-tech feel done with restraint. Deep space-navy with soft aurora gradients, tasteful glass cards, and a crisp geometric typeface. Signals that Directive AI is at the frontier — without the gimmicks.</p>
+          <div class="tags"><span class="tag">Dark + gradient</span><span class="tag">Glassmorphism</span><span class="tag">Space Grotesk</span><span class="tag">Frontier tech</span></div>
+        </div>
+        <div class="c-actions">
+          <a class="btn btn-primary" href="aurora.html" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="bar"><i></i><i></i><i></i><span class="url">directiveai.co — Aurora</span></div>
+        <div class="frame-clip"><iframe data-src="aurora.html" loading="lazy" title="Aurora concept"></iframe></div>
+        <a class="cover" href="aurora.html" target="_blank" rel="noopener" aria-label="Open Aurora concept"></a>
+      </div>
+    </section>
+
+    <!-- 04 Folio -->
+    <section id="folio" class="concept">
+      <div class="c-head">
+        <div class="l">
+          <div class="c-num">CONCEPT 04</div>
+          <h2>Folio — editorial &amp; art-directed</h2>
+          <p class="desc">A design-forward magazine spread, inspired by Jen Simmons' experimental CSS-Grid layouts. Warm paper, a dramatic Didone display face, asymmetric grids with deliberate overlap, drop caps, ruled lines, big figure numbers, and one confident vermillion accent. Signals taste, craft, and editorial intelligence.</p>
+          <div class="tags"><span class="tag">Editorial</span><span class="tag">CSS Grid</span><span class="tag">Playfair Display</span><span class="tag">Overlap &amp; asymmetry</span></div>
+        </div>
+        <div class="c-actions">
+          <a class="btn btn-primary" href="folio.html" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="bar"><i></i><i></i><i></i><span class="url">directiveai.co — Folio</span></div>
+        <div class="frame-clip"><iframe data-src="folio.html" loading="lazy" title="Folio concept"></iframe></div>
+        <a class="cover" href="folio.html" target="_blank" rel="noopener" aria-label="Open Folio concept"></a>
+      </div>
+    </section>
+
+    <!-- 05 Decimal -->
+    <section id="decimal" class="concept">
+      <div class="c-head">
+        <div class="l">
+          <div class="c-num">CONCEPT 05</div>
+          <h2>Decimal — systematic &amp; indexed</h2>
+          <p class="desc">Inspired by Johnny.Decimal. Treats Directive AI's offering as a clean, numbered <em>system</em> — practice areas (10–49), categories, and dotted decimal IDs (11.01) laid out as a precise, documentation-style index. Light theme, IBM Plex Sans + Mono, dot-leader rows, teal accent. Signals method, rigour, and order.</p>
+          <div class="tags"><span class="tag">Systematic</span><span class="tag">Monospace index</span><span class="tag">IBM Plex</span><span class="tag">Documentation-clean</span></div>
+        </div>
+        <div class="c-actions">
+          <a class="btn btn-primary" href="decimal.html" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="bar"><i></i><i></i><i></i><span class="url">directiveai.co — Decimal</span></div>
+        <div class="frame-clip"><iframe data-src="decimal.html" loading="lazy" title="Decimal concept"></iframe></div>
+        <a class="cover" href="decimal.html" target="_blank" rel="noopener" aria-label="Open Decimal concept"></a>
+      </div>
+    </section>
+
+    <!-- 06 Prism -->
+    <section id="prism" class="concept">
+      <div class="c-head">
+        <div class="l">
+          <div class="c-num">CONCEPT 06</div>
+          <h2>Prism — premium product (Stripe.com style)</h2>
+          <p class="desc">Inspired by Stripe's <em>product/marketing</em> site. The signature multicolor gradient hero with an angled section cut, Stripe's blurple accent on a navy + light-blue palette, soft rounded cards, a dark syntax-highlighted code panel, and an "Insights" section with post cards. Polished, credible, product-led. (For the developer-blog aesthetic, see Concept 07.)</p>
+          <div class="tags"><span class="tag">Stripe gradient</span><span class="tag">Blurple accent</span><span class="tag">Code panel</span><span class="tag">Product marketing</span></div>
+        </div>
+        <div class="c-actions">
+          <a class="btn btn-primary" href="prism.html" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="bar"><i></i><i></i><i></i><span class="url">directiveai.co — Prism</span></div>
+        <div class="frame-clip"><iframe data-src="prism.html" loading="lazy" title="Prism concept"></iframe></div>
+        <a class="cover" href="prism.html" target="_blank" rel="noopener" aria-label="Open Prism concept"></a>
+      </div>
+    </section>
+
+    <!-- 07 Console -->
+    <section id="console" class="concept">
+      <div class="c-head">
+        <div class="l">
+          <div class="c-num">CONCEPT 07</div>
+          <h2>Console — developer blog (Stripe.dev style)</h2>
+          <p class="desc">Faithful to the actual <strong>stripe.dev/blog</strong> developer aesthetic: a monospace bracketed top nav, a near-monochrome pale-lavender canvas, a huge Geist grotesque masthead, slash-prefixed section labels (/ SERVICES, / METADATA), a left filter/index tree with an ASCII box, and ruled data-tables of rows. Technical, precise, IDE-like — credibility through restraint.</p>
+          <div class="tags"><span class="tag">Geist + Geist Mono</span><span class="tag">Bracketed nav</span><span class="tag">Data tables</span><span class="tag">Monochrome / terminal</span></div>
+        </div>
+        <div class="c-actions">
+          <a class="btn btn-primary" href="console.html" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="bar"><i></i><i></i><i></i><span class="url">directiveai.co — Console</span></div>
+        <div class="frame-clip"><iframe data-src="console.html" loading="lazy" title="Console concept"></iframe></div>
+        <a class="cover" href="console.html" target="_blank" rel="noopener" aria-label="Open Console concept"></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>Directive AI — design concepts · prepared for review</span>
+      <span>Built as static HTML · ready to promote to the live site</span>
+    </div>
+  </footer>
+
+  <script>
+    // Scale each preview iframe to fit its clip width, and lazy-load only when near viewport.
+    const DESIGN_WIDTH = 1440;
+    function scaleFrames() {
+      document.querySelectorAll('.frame-clip').forEach(clip => {
+        const iframe = clip.querySelector('iframe');
+        const scale = clip.clientWidth / DESIGN_WIDTH;
+        iframe.style.transform = 'scale(' + scale + ')';
+      });
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const iframe = e.target.querySelector('iframe');
+          if (iframe && !iframe.src) iframe.src = iframe.dataset.src;
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '300px' });
+    document.querySelectorAll('.preview').forEach(p => io.observe(p));
+    window.addEventListener('resize', scaleFrames);
+    window.addEventListener('load', scaleFrames);
+    scaleFrames();
+  </script>
+</body>
+</html>
