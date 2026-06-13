@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Directive AI — Concept 05 · Decimal</title>
+  <meta name="description" content="Directive AI helps businesses adopt artificial intelligence safely, responsibly, and effectively." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fbfbf8;
+      --surface: #ffffff;
+      --ink: #15171b;
+      --ink-2: #3e434b;
+      --ink-3: #5d626b;
+      --mute: #9a9ea6;
+      --line: #e8e7e1;
+      --line-2: #d9d8d0;
+      --accent: #0e8f86;       /* teal */
+      --accent-deep: #0b7068;
+      --accent-soft: #e3f3f1;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: "IBM Plex Sans", system-ui, sans-serif; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1,h2,h3 { margin: 0; font-weight: 500; letter-spacing: -0.018em; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 36px; }
+    .accent { color: var(--accent); }
+    .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+    .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+    /* ── Header ── */
+    header { position: sticky; top: 0; z-index: 50; background: rgba(251,251,248,0.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 66px; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
+    .brand .id { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 12px; color: var(--accent); background: var(--accent-soft); padding: 3px 7px; border-radius: 5px; }
+    .navlinks { display: flex; align-items: center; gap: 28px; }
+    .navlinks a { font-size: 14px; color: var(--ink-2); display: inline-flex; align-items: baseline; gap: 7px; transition: color .2s; }
+    .navlinks a .n { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--mute); }
+    .navlinks a:hover { color: var(--accent); }
+    .navlinks a:hover .n { color: var(--accent); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 500; padding: 9px 16px; border-radius: 7px; cursor: pointer; transition: all .22s; }
+    .btn-solid { background: var(--accent); color: #fff; }
+    .btn-solid:hover { background: var(--accent-deep); }
+    .btn-ghost { border: 1px solid var(--line-2); color: var(--ink); background: var(--surface); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Path breadcrumb ── */
+    .path { border-bottom: 1px solid var(--line); }
+    .path .inner { padding: 9px 0; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--mute); display: flex; gap: 8px; flex-wrap: wrap; }
+    .path .inner .sep { color: var(--line-2); }
+    .path .inner b { color: var(--ink-2); font-weight: 500; }
+
+    /* ── Hero ── */
+    .hero { padding: 76px 0 84px; }
+    .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 64px; align-items: start; }
+    .hero .eyebrow { margin-bottom: 22px; }
+    .hero h1 { font-size: clamp(40px, 5.6vw, 68px); line-height: 1.04; }
+    .hero h1 .accent { color: var(--accent); }
+    .hero .lede { margin-top: 26px; font-size: 18px; color: var(--ink-3); max-width: 46ch; }
+    .hero .actions { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero .micro { margin-top: 40px; display: flex; gap: 28px; flex-wrap: wrap; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--mute); }
+    .hero .micro b { color: var(--ink-2); font-weight: 500; }
+
+    /* ── System map card ── */
+    .sysmap { border: 1px solid var(--line-2); border-radius: 12px; background: var(--surface); overflow: hidden; box-shadow: 0 14px 40px rgba(20,30,28,0.06); }
+    .sysmap .cap { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line); background: #fcfcfa; font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--mute); }
+    .sysmap .cap .dotset i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); display: inline-block; margin-left: 5px; }
+    .sysmap .area { padding: 14px 16px; border-bottom: 1px solid var(--line); }
+    .sysmap .area:last-child { border-bottom: 0; }
+    .sysmap .area .ah { display: flex; align-items: baseline; gap: 12px; }
+    .sysmap .area .rng { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--accent); font-weight: 500; min-width: 58px; }
+    .sysmap .area .at { font-weight: 500; font-size: 15px; }
+    .sysmap .area .sub { margin: 8px 0 0 70px; display: grid; gap: 5px; }
+    .sysmap .area .sub .r { display: flex; align-items: baseline; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-3); }
+    .sysmap .area .sub .r .rid { color: var(--mute); min-width: 46px; }
+
+    /* ── Section scaffolding ── */
+    section { scroll-margin-top: 120px; }
+    .band { padding: 84px 0; border-top: 1px solid var(--line); }
+    .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; flex-wrap: wrap; margin-bottom: 48px; }
+    .sec-head .l .tag { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--accent); letter-spacing: 0.08em; }
+    .sec-head .l h2 { font-size: clamp(28px, 3.8vw, 44px); line-height: 1.05; margin-top: 14px; }
+    .sec-head .r { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--mute); text-align: right; line-height: 1.7; }
+
+    /* ── Services: indexed areas with dot leaders ── */
+    .area-block { padding: 26px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 230px 1fr; gap: 40px; }
+    .area-block:first-child { border-top: 0; }
+    .area-block .ab-head .rng { font-family: "IBM Plex Mono", monospace; font-size: 14px; color: var(--accent); font-weight: 500; }
+    .area-block .ab-head h3 { font-size: 21px; margin-top: 8px; }
+    .area-block .ab-head p { margin: 12px 0 0; font-size: 14px; color: var(--ink-3); }
+    .leader-list { display: grid; gap: 2px; align-self: center; }
+    .leader { display: flex; align-items: center; padding: 8px 0; }
+    .leader .rid { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--accent); font-weight: 500; min-width: 58px; }
+    .leader .nm { font-size: 15px; color: var(--ink); }
+    .leader .dots { flex: 1; border-bottom: 1px dotted var(--line-2); margin: 0 14px; transform: translateY(-3px); }
+    .leader .meta { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--mute); }
+    .leader:hover .nm { color: var(--accent); }
+
+    /* ── Approach ── */
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .step { background: var(--surface); padding: 24px 22px 28px; }
+    .step .sn { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--accent); font-weight: 500; }
+    .step h3 { font-size: 18px; margin: 14px 0 10px; }
+    .step p { margin: 0; font-size: 14px; color: var(--ink-3); }
+    .step .ar { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--mute); margin-top: 16px; }
+
+    /* ── About ── */
+    .about-grid { display: grid; grid-template-columns: 1.25fr 0.95fr; gap: 64px; align-items: start; }
+    .about-grid .lede2 { font-size: 21px; line-height: 1.45; color: var(--ink); letter-spacing: -0.01em; }
+    .about-grid .body { margin-top: 20px; color: var(--ink-3); font-size: 15.5px; }
+    .principles { border: 1px solid var(--line-2); border-radius: 12px; background: var(--surface); overflow: hidden; }
+    .principles .ph { padding: 12px 18px; border-bottom: 1px solid var(--line); font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.08em; color: var(--mute); }
+    .principles .p { padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .principles .p:last-child { border-bottom: 0; }
+    .principles .p .pid { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--accent); }
+    .principles .p b { display: block; margin: 4px 0 3px; font-weight: 600; font-size: 15px; }
+    .principles .p span { font-size: 13.5px; color: var(--ink-3); }
+
+    /* ── CTA ── */
+    .cta { border-top: 1px solid var(--line); padding: 92px 0; }
+    .cta-card { border: 1px solid var(--line-2); border-radius: 16px; background: var(--surface); padding: 56px 48px; position: relative; overflow: hidden; }
+    .cta-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--accent); }
+    .cta-card .eyebrow { margin-bottom: 18px; }
+    .cta-card h2 { font-size: clamp(28px, 4.2vw, 50px); line-height: 1.05; max-width: 20ch; }
+    .cta-card p { margin: 20px 0 30px; max-width: 52ch; color: var(--ink-3); font-size: 17px; }
+    .cta-card .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--line); padding: 48px 0 56px; }
+    .foot { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
+    .foot .brand { font-size: 16px; }
+    .foot .col h4 { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); font-weight: 500; margin: 0 0 14px; }
+    .foot .col a { display: flex; align-items: baseline; gap: 9px; font-size: 14px; color: var(--ink-2); padding: 4px 0; }
+    .foot .col a .n { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--mute); }
+    .foot .col a:hover { color: var(--accent); }
+    .foot-meta { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--mute); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+    @media (max-width: 880px) {
+      .wrap { padding: 0 22px; }
+      .navlinks a:not(.btn) { display: none; }
+      .hero-grid { grid-template-columns: 1fr; gap: 44px; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .area-block { grid-template-columns: 1fr; gap: 16px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .foot { grid-template-columns: 1fr 1fr; }
+      .band, .cta { padding: 62px 0; }
+      .cta-card { padding: 40px 26px; }
+    }
+    @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } .foot { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="#" class="brand"><span class="id mono">00.00</span>Directive&nbsp;AI</a>
+      <nav class="navlinks">
+        <a href="#services"><span class="n">10</span>Services</a>
+        <a href="#approach"><span class="n">50</span>Approach</a>
+        <a href="#about"><span class="n">90</span>About</a>
+        <a href="#contact" class="btn btn-solid">Book a consult →</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="path">
+    <div class="wrap inner mono">
+      <span>directiveai.co</span><span class="sep">/</span><span>system</span><span class="sep">/</span><b>00.00 — index</b>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">A system for adopting AI</p>
+        <h1>Bring <span class="accent">order</span> to artificial intelligence.</h1>
+        <p class="lede">AI adoption fails in the gaps — between strategy and delivery, ambition and governance. Directive AI gives your organisation a clear, numbered system: every initiative assessed, prioritised, governed, and owned.</p>
+        <div class="actions">
+          <a href="#contact" class="btn btn-solid">Start the conversation →</a>
+          <a href="#services" class="btn btn-ghost">Browse the system</a>
+        </div>
+        <div class="micro">
+          <span><b>4</b> practice areas</span>
+          <span><b>00–99</b> fully indexed</span>
+          <span><b>Day 0</b> governance built in</span>
+        </div>
+      </div>
+      <div class="sysmap" aria-hidden="true">
+        <div class="cap mono"><span>DIRECTIVE&nbsp;AI · SYSTEM MAP</span><span class="dotset"><i></i><i></i><i></i></span></div>
+        <div class="area">
+          <div class="ah"><span class="rng">10–19</span><span class="at">Strategy &amp; Roadmap</span></div>
+          <div class="sub"><div class="r"><span class="rid">11.01</span>Opportunity assessment</div><div class="r"><span class="rid">11.02</span>Prioritised roadmap</div></div>
+        </div>
+        <div class="area">
+          <div class="ah"><span class="rng">20–29</span><span class="at">Responsible AI &amp; Governance</span></div>
+          <div class="sub"><div class="r"><span class="rid">21.01</span>Risk &amp; policy framework</div><div class="r"><span class="rid">21.02</span>Safety guardrails</div></div>
+        </div>
+        <div class="area">
+          <div class="ah"><span class="rng">30–39</span><span class="at">Implementation &amp; Integration</span></div>
+          <div class="sub"><div class="r"><span class="rid">31.01</span>Pilot to production</div></div>
+        </div>
+        <div class="area">
+          <div class="ah"><span class="rng">40–49</span><span class="at">Enablement &amp; Training</span></div>
+          <div class="sub"><div class="r"><span class="rid">41.01</span>Team capability transfer</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="l"><span class="tag mono">§ 10–49</span><h2>The system, by area.</h2></div>
+        <div class="r mono">Four practice areas<br>Strategy → Governance<br>Build → Enable</div>
+      </div>
+
+      <div class="area-block">
+        <div class="ab-head">
+          <div class="rng mono">10–19</div>
+          <h3>AI Strategy &amp; Roadmap</h3>
+          <p>Find where AI creates genuine value — and where it doesn't.</p>
+        </div>
+        <div class="leader-list">
+          <a class="leader" href="#contact"><span class="rid">11.01</span><span class="nm">AI opportunity assessment</span><span class="dots"></span><span class="meta">discovery</span></a>
+          <a class="leader" href="#contact"><span class="rid">11.02</span><span class="nm">Prioritised, sequenced roadmap</span><span class="dots"></span><span class="meta">planning</span></a>
+          <a class="leader" href="#contact"><span class="rid">12.01</span><span class="nm">Business case &amp; ROI modelling</span><span class="dots"></span><span class="meta">advisory</span></a>
+        </div>
+      </div>
+
+      <div class="area-block">
+        <div class="ab-head">
+          <div class="rng mono">20–29</div>
+          <h3>Responsible AI &amp; Governance</h3>
+          <p>Move fast without compromising trust or compliance.</p>
+        </div>
+        <div class="leader-list">
+          <a class="leader" href="#contact"><span class="rid">21.01</span><span class="nm">Risk, policy &amp; compliance framework</span><span class="dots"></span><span class="meta">governance</span></a>
+          <a class="leader" href="#contact"><span class="rid">21.02</span><span class="nm">Safety guardrails &amp; evaluations</span><span class="dots"></span><span class="meta">assurance</span></a>
+          <a class="leader" href="#contact"><span class="rid">22.01</span><span class="nm">Data privacy &amp; model oversight</span><span class="dots"></span><span class="meta">controls</span></a>
+        </div>
+      </div>
+
+      <div class="area-block">
+        <div class="ab-head">
+          <div class="rng mono">30–39</div>
+          <h3>Implementation &amp; Integration</h3>
+          <p>From pilot to production, embedded in your stack.</p>
+        </div>
+        <div class="leader-list">
+          <a class="leader" href="#contact"><span class="rid">31.01</span><span class="nm">Pilot design &amp; build</span><span class="dots"></span><span class="meta">delivery</span></a>
+          <a class="leader" href="#contact"><span class="rid">31.02</span><span class="nm">Production engineering &amp; MLOps</span><span class="dots"></span><span class="meta">delivery</span></a>
+          <a class="leader" href="#contact"><span class="rid">32.01</span><span class="nm">Workflow &amp; systems integration</span><span class="dots"></span><span class="meta">delivery</span></a>
+        </div>
+      </div>
+
+      <div class="area-block">
+        <div class="ab-head">
+          <div class="rng mono">40–49</div>
+          <h3>Enablement &amp; Training</h3>
+          <p>Make the advantage stick — and stay with you.</p>
+        </div>
+        <div class="leader-list">
+          <a class="leader" href="#contact"><span class="rid">41.01</span><span class="nm">Executive briefings &amp; literacy</span><span class="dots"></span><span class="meta">enablement</span></a>
+          <a class="leader" href="#contact"><span class="rid">41.02</span><span class="nm">Hands-on team upskilling</span><span class="dots"></span><span class="meta">enablement</span></a>
+          <a class="leader" href="#contact"><span class="rid">42.01</span><span class="nm">Capability transfer &amp; handover</span><span class="dots"></span><span class="meta">enablement</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="approach" class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="l"><span class="tag mono">§ 50–59</span><h2>A transparent method.</h2></div>
+        <div class="r mono">No black boxes<br>You always know<br>where you are</div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="sn">51 · Assess</div><h3>Understand</h3><p>Map goals, data, and constraints to find where AI is genuinely worth it.</p><div class="ar">→ output: brief</div></div>
+        <div class="step"><div class="sn">52 · Strategise</div><h3>Prioritise</h3><p>A sequenced roadmap with value, risk, and ownership per initiative.</p><div class="ar">→ output: roadmap</div></div>
+        <div class="step"><div class="sn">53 · Implement</div><h3>Build</h3><p>Production-ready systems, integrated and governed from day one.</p><div class="ar">→ output: system</div></div>
+        <div class="step"><div class="sn">54 · Enable</div><h3>Scale</h3><p>We hand over capability, not dependency — your teams run it.</p><div class="ar">→ output: capability</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="band">
+    <div class="wrap about-grid">
+      <div>
+        <span class="tag mono accent">§ 90 — About</span>
+        <p class="lede2" style="margin-top:18px">We're a team of engineers, researchers, and strategists who bring method to AI — so it becomes a directive advantage for your business, never a liability.</p>
+        <p class="body">We've delivered AI in regulated, high-stakes environments and seen exactly where projects quietly fail: in the gaps between strategy and delivery. Directive AI exists to close them. We're vendor-neutral by principle and pragmatic by habit — recommending what serves your business, not a platform's incentives, and transferring capability as we go.</p>
+        <a href="#contact" class="btn btn-solid" style="margin-top:26px">Work with us →</a>
+      </div>
+      <div class="principles">
+        <div class="ph mono">90.00 — OPERATING PRINCIPLES</div>
+        <div class="p"><span class="pid mono">90.01</span><b>Pragmatic</b><span>Outcomes you can measure, not demos that never ship.</span></div>
+        <div class="p"><span class="pid mono">90.02</span><b>Responsible</b><span>Safety, privacy, and governance designed in from day one.</span></div>
+        <div class="p"><span class="pid mono">90.03</span><b>Independent</b><span>The right approach for you, free of any vendor's agenda.</span></div>
+        <div class="p"><span class="pid mono">90.04</span><b>Transparent</b><span>Clear reasoning and honest trade-offs at every step.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="cta">
+    <div class="wrap">
+      <div class="cta-card">
+        <p class="eyebrow">99.01 — Begin</p>
+        <h2>Ready to give your AI a system?</h2>
+        <p>Tell us where you are today. We'll help you find the clearest path forward — starting with a no-obligation conversation.</p>
+        <div class="actions">
+          <a href="mailto:hello@directiveai.co" class="btn btn-solid">Book a consultation →</a>
+          <a href="mailto:hello@directiveai.co" class="btn btn-ghost">hello@directiveai.co</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <a href="#" class="brand"><span class="id mono">00.00</span>&nbsp;Directive&nbsp;AI</a>
+          <p style="margin:14px 0 0;font-size:14px;color:var(--ink-3);max-width:32ch;">A clear, numbered system for adopting AI safely and effectively.</p>
+        </div>
+        <div class="col">
+          <h4>System</h4>
+          <a href="#services"><span class="n">10</span>Services</a>
+          <a href="#approach"><span class="n">50</span>Approach</a>
+          <a href="#about"><span class="n">90</span>About</a>
+        </div>
+        <div class="col">
+          <h4>Contact</h4>
+          <a href="mailto:hello@directiveai.co"><span class="n">99</span>hello@directiveai.co</a>
+          <a href="#contact"><span class="n">99</span>Book a consult</a>
+        </div>
+      </div>
+      <div class="foot-meta mono">
+        <span>© 2026 Directive AI — all rights reserved</span>
+        <span>directiveai.co · v1.0 · MMXXVI</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
